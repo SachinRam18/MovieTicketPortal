@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}Cinema Booking - Home{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="p-5 text-center bg-dark rounded-3 mb-4">
+            <h1 class="display-4 fw-bold">Welcome to Cinema Booking</h1>
+            <p class="fs-5 mb-4">Experience the latest blockbusters in comfort and style.</p>
+            <p class="mb-0">
+                <i class="fas fa-film me-2"></i> Now Showing: {{ movies|length }} movies
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="mb-4 border-start border-danger border-5 ps-3">Now Showing</h2>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    {% for movie in movies %}
+    <div class="col">
+        <div class="card movie-card h-100">
+            <img src="{{ movie.image_url }}" class="card-img-top" alt="{{ movie.title }}">
+            <div class="card-body">
+                <h5 class="card-title movie-title">{{ movie.title }}</h5>
+                <p class="card-text movie-genre">{{ movie.genre }}</p>
+                <p class="card-text movie-duration">
+                    <i class="far fa-clock me-1"></i> {{ movie.duration }} minutes
+                </p>
+                <p class="card-text">{{ movie.description|truncate(100) }}</p>
+                <a href="{{ url_for('showtimes', movie_id=movie.id) }}" class="btn btn-primary">
+                    <i class="fas fa-ticket-alt me-1"></i> View Showtimes
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i> No movies are currently showing. Please check back later.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card bg-dark shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3>Join Our Newsletter</h3>
+                        <p class="mb-md-0">Stay updated with the latest movies and exclusive offers.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your Email">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

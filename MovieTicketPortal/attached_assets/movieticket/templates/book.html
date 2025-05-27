@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>Book Ticket</title></head>
+<body>
+<h1>Book Your Seat</h1>
+<form method="post">
+  Name: <input type="text" name="name"><br>
+  Email: <input type="email" name="email"><br>
+  Phone: <input type="text" name="phone"><br>
+  Seat: 
+  <select name="seat">
+    {% for seat in seats %}
+      <option value="{{ seat['seat_id'] }}">{{ seat['seat_number'] }}</option>
+    {% endfor %}
+  </select><br>
+  <input type="submit" value="Book">
+</form>
+</body>
+</html>

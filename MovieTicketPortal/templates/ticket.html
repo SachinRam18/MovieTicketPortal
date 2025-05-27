@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}Booking Confirmation{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-md-12 text-center">
+        <h1 class="mb-3">Booking Confirmed!</h1>
+        <p class="lead">Thank you for your purchase. Your tickets are ready below.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="ticket mb-5">
+            <div class="ticket-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="ticket-title mb-0">Cinema Booking</h2>
+                    <p class="mb-0">Movie Ticket</p>
+                </div>
+                <div class="text-end">
+                    <p class="mb-0 text-muted">Booking Reference:</p>
+                    <p class="booking-ref mb-0">{{ booking.booking_reference }}</p>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h3 class="mb-3">{{ booking.showtime.movie.title }}</h3>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Date:</span>
+                    <span>{{ booking.showtime.formatted_date }}</span>
+                </div>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Time:</span>
+                    <span>{{ booking.showtime.formatted_time }}</span>
+                </div>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Theater:</span>
+                    <span>{{ booking.showtime.theater.name }}</span>
+                </div>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Seats:</span>
+                    <span>{{ seat_str }}</span>
+                </div>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Customer:</span>
+                    <span>{{ booking.customer_name }}</span>
+                </div>
+                
+                <div class="ticket-info">
+                    <span class="ticket-label">Total Paid:</span>
+                    <span>${{ "%.2f"|format(booking.total_price) }}</span>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <div class="mb-2">
+                    <!-- Barcode representation -->
+                    <svg width="250" height="80">
+                        <rect x="10" y="10" width="5" height="60" fill="white" />
+                        <rect x="20" y="10" width="2" height="60" fill="white" />
+                        <rect x="25" y="10" width="3" height="60" fill="white" />
+                        <rect x="35" y="10" width="5" height="60" fill="white" />
+                        <rect x="45" y="10" width="2" height="60" fill="white" />
+                        <rect x="55" y="10" width="7" height="60" fill="white" />
+                        <rect x="65" y="10" width="3" height="60" fill="white" />
+                        <rect x="75" y="10" width="5" height="60" fill="white" />
+                        <rect x="85" y="10" width="2" height="60" fill="white" />
+                        <rect x="90" y="10" width="5" height="60" fill="white" />
+                        <rect x="100" y="10" width="3" height="60" fill="white" />
+                        <rect x="110" y="10" width="7" height="60" fill="white" />
+                        <rect x="120" y="10" width="2" height="60" fill="white" />
+                        <rect x="125" y="10" width="5" height="60" fill="white" />
+                        <rect x="135" y="10" width="3" height="60" fill="white" />
+                        <rect x="145" y="10" width="5" height="60" fill="white" />
+                        <rect x="155" y="10" width="2" height="60" fill="white" />
+                        <rect x="165" y="10" width="7" height="60" fill="white" />
+                        <rect x="175" y="10" width="3" height="60" fill="white" />
+                        <rect x="185" y="10" width="2" height="60" fill="white" />
+                        <rect x="195" y="10" width="5" height="60" fill="white" />
+                        <rect x="205" y="10" width="3" height="60" fill="white" />
+                        <rect x="215" y="10" width="2" height="60" fill="white" />
+                        <rect x="225" y="10" width="7" height="60" fill="white" />
+                        <rect x="235" y="10" width="3" height="60" fill="white" />
+                    </svg>
+                </div>
+                <small class="text-muted">{{ booking.booking_reference }}</small>
+            </div>
+        </div>
+        
+        <div class="text-center mb-5">
+            <button class="btn btn-outline-primary me-2" onclick="window.print()">
+                <i class="fas fa-print me-1"></i> Print Ticket
+            </button>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-home me-1"></i> Return to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

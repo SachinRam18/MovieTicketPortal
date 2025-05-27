@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin - Manage Showtimes{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Manage Showtimes</h1>
+    <div>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary me-2">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addShowtimeModal">
+            <i class="fas fa-plus me-1"></i> Add Showtime
+        </button>
+    </div>
+</div>
+
+{% if showtimes %}
+    <div class="table-responsive">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Theater</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for showtime in showtimes %}
+                    <tr>
+                        <td>{{ showtime.movie.title }}</td>
+                        <td>{{ showtime.theater.name }}</td>
+                        <td>{{ showtime.formatted_date }}</td>
+                        <td>{{ showtime.formatted_time }}</td>
+                        <td>${{ "%.2f"|format(showtime.price) }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editShowtimeModal{{ showtime.id }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteShowtimeModal{{ showtime.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Edit Showtime Modal -->
+                    <div class="modal fade" id="editShowtimeModal{{ showtime.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Showtime</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ url_for('admin_edit_showtime', showtime_id=showtime.id) }}" method="POST">
+                                    <div class="modal-body">
+                                        {{ form.csrf_token }}
+                                        
+                                        <div class="mb-3">
+                                            <label for="movie_id" class="form-label">Movie</label>
+                                            <select class="form-select" id="movie_id" name="movie_id" required>
+                                                {% for movie in form.movie_id.choices %}
+                                                <option value="{{ movie[0] }}" {% if movie[0] == showtime.movie_id %}selected{% endif %}>
+                                                    {{ movie[1] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="theater_id" class="form-label">Theater</label>
+                                            <select class="form-select" id="theater_id" name="theater_id" required>
+                                                {% for theater in form.theater_id.choices %}
+                                                <option value="{{ theater[0] }}" {% if theater[0] == showtime.theater_id %}selected{% endif %}>
+                                                    {{ theater[1] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="start_time" class="form-label">Start Time</label>
+                                            <input type="datetime-local" class="form-control" id="start_time" name="start_time" 
+                                                   value="{{ showtime.start_time.strftime('%Y-%m-%dT%H:%M') }}" required>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="price" class="form-label">Ticket Price ($)</label>
+                                            <input type="number" class="form-control" id="price" name="price" 
+                                                   value="{{ showtime.price }}" min="0.01" step="0.01" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Delete Showtime Modal -->
+                    <div class="modal fade" id="deleteShowtimeModal{{ showtime.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete the showtime for <strong>{{ showtime.movie.title }}</strong> 
+                                       at <strong>{{ showtime.formatted_time }}</strong> on <strong>{{ showtime.formatted_date }}</strong>?</p>
+                                    <p class="text-danger">This action cannot be undone and will delete all associated bookings.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{{ url_for('admin_delete_showtime', showtime_id=showtime.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i> No showtimes found. Add a showtime to get started.
+    </div>
+{% endif %}
+
+<!-- Add Showtime Modal -->
+<div class="modal fade" id="addShowtimeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Showtime</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('admin_add_showtime') }}" method="POST">
+                <div class="modal-body">
+                    {{ form.csrf_token }}
+                    
+                    <div class="mb-3">
+                        <label for="movie_id" class="form-label">Movie</label>
+                        <select class="form-select" id="movie_id" name="movie_id" required>
+                            {% for movie in form.movie_id.choices %}
+                            <option value="{{ movie[0] }}">{{ movie[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="theater_id" class="form-label">Theater</label>
+                        <select class="form-select" id="theater_id" name="theater_id" required>
+                            {% for theater in form.theater_id.choices %}
+                            <option value="{{ theater[0] }}">{{ theater[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Start Time</label>
+                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Ticket Price ($)</label>
+                        <input type="number" class="form-control" id="price" name="price" min="0.01" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Showtime</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

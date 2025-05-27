@@ -1,0 +1,304 @@
+/* Cinema Theme Colors */
+:root {
+  --cinema-red: #e63946;
+  --cinema-dark: #1d3557;
+  --cinema-blue: #457b9d;
+  --cinema-light-blue: #a8dadc;
+  --cinema-white: #f1faee;
+  --seat-available: #3a86ff;
+  --seat-selected: #38b000;
+  --seat-booked: #d90429;
+}
+
+body {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Movie Cards */
+.movie-card {
+  transition: transform 0.3s ease;
+  border: none;
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+  height: 100%;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card .card-img-top {
+  height: 400px;
+  object-fit: cover;
+}
+
+.movie-card .card-body {
+  padding: 1.5rem;
+}
+
+.movie-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.movie-genre {
+  color: var(--cinema-light-blue);
+  font-size: 0.9rem;
+}
+
+.movie-duration {
+  color: var(--bs-secondary);
+  font-size: 0.9rem;
+}
+
+/* Showtime Styling */
+.showtime-item {
+  border-left: 4px solid var(--cinema-blue);
+  transition: all 0.3s ease;
+}
+
+.showtime-item:hover {
+  border-left-color: var(--cinema-red);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.showtime-time {
+  font-weight: 700;
+  color: var(--cinema-light-blue);
+}
+
+.price-badge {
+  background-color: var(--cinema-blue);
+  color: white;
+  font-weight: 600;
+}
+
+/* Theater Seating */
+.screen {
+  height: 10px;
+  background: linear-gradient(to bottom, var(--cinema-light-blue), transparent);
+  margin-bottom: 30px;
+  box-shadow: 0px 3px 10px rgba(255, 255, 255, 0.7);
+  width: 100%;
+  max-width: 800px;
+}
+
+.screen-label {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cinema-light-blue);
+  margin-bottom: 5px;
+}
+
+.seat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.row-label {
+  width: 30px;
+  text-align: center;
+  font-weight: bold;
+  line-height: 35px;
+  color: var(--cinema-light-blue);
+}
+
+.seat {
+  width: 35px;
+  height: 35px;
+  margin: 3px;
+  border-radius: 5px;
+  background-color: var(--seat-available);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.seat.selected {
+  background-color: var(--seat-selected);
+}
+
+.seat.booked {
+  background-color: var(--seat-booked);
+  cursor: not-allowed;
+}
+
+.seat:hover:not(.booked) {
+  transform: scale(1.1);
+}
+
+.seat-legend {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+}
+
+.legend-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.legend-available {
+  background-color: var(--seat-available);
+}
+
+.legend-selected {
+  background-color: var(--seat-selected);
+}
+
+.legend-booked {
+  background-color: var(--seat-booked);
+}
+
+/* Ticket Styling */
+.ticket {
+  background-color: var(--bs-dark);
+  border: 2px dashed var(--cinema-light-blue);
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bs-dark);
+  border-radius: 50%;
+  box-shadow: 20px 0 0 var(--bs-dark), 40px 0 0 var(--bs-dark), 60px 0 0 var(--bs-dark),
+              80px 0 0 var(--bs-dark), 100px 0 0 var(--bs-dark), 120px 0 0 var(--bs-dark),
+              140px 0 0 var(--bs-dark), 160px 0 0 var(--bs-dark), 180px 0 0 var(--bs-dark),
+              200px 0 0 var(--bs-dark), 220px 0 0 var(--bs-dark), 240px 0 0 var(--bs-dark),
+              260px 0 0 var(--bs-dark), 280px 0 0 var(--bs-dark), 300px 0 0 var(--bs-dark),
+              320px 0 0 var(--bs-dark), 340px 0 0 var(--bs-dark), 360px 0 0 var(--bs-dark),
+              380px 0 0 var(--bs-dark), 400px 0 0 var(--bs-dark), 420px 0 0 var(--bs-dark);
+}
+
+.ticket::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bs-dark);
+  border-radius: 50%;
+  box-shadow: 20px 0 0 var(--bs-dark), 40px 0 0 var(--bs-dark), 60px 0 0 var(--bs-dark),
+              80px 0 0 var(--bs-dark), 100px 0 0 var(--bs-dark), 120px 0 0 var(--bs-dark),
+              140px 0 0 var(--bs-dark), 160px 0 0 var(--bs-dark), 180px 0 0 var(--bs-dark),
+              200px 0 0 var(--bs-dark), 220px 0 0 var(--bs-dark), 240px 0 0 var(--bs-dark),
+              260px 0 0 var(--bs-dark), 280px 0 0 var(--bs-dark), 300px 0 0 var(--bs-dark),
+              320px 0 0 var(--bs-dark), 340px 0 0 var(--bs-dark), 360px 0 0 var(--bs-dark),
+              380px 0 0 var(--bs-dark), 400px 0 0 var(--bs-dark), 420px 0 0 var(--bs-dark);
+}
+
+.ticket-header {
+  border-bottom: 1px dashed var(--cinema-light-blue);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ticket-title {
+  color: var(--cinema-red);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ticket-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.ticket-label {
+  font-weight: 600;
+  color: var(--cinema-light-blue);
+}
+
+.booking-ref {
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: var(--cinema-red);
+  letter-spacing: 2px;
+}
+
+/* Admin styling */
+.admin-card {
+  background-color: var(--bs-dark);
+  border: 1px solid var(--bs-secondary);
+  transition: all 0.3s ease;
+}
+
+.admin-card:hover {
+  border-color: var(--cinema-light-blue);
+  transform: translateY(-5px);
+}
+
+.admin-icon {
+  font-size: 2rem;
+  color: var(--cinema-light-blue);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .movie-card .card-img-top {
+    height: 300px;
+  }
+  
+  .seat {
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+    font-size: 0.7rem;
+  }
+  
+  .row-label {
+    width: 20px;
+    line-height: 25px;
+  }
+}
+
+@media (max-width: 576px) {
+  .movie-card .card-img-top {
+    height: 250px;
+  }
+  
+  .seat {
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    font-size: 0.6rem;
+  }
+  
+  .row-label {
+    width: 15px;
+    line-height: 20px;
+  }
+}

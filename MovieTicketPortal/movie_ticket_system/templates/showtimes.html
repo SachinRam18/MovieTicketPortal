@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ movie.title }} - Showtimes{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ movie.title }}</li>
+    </ol>
+</nav>
+
+<div class="row mb-5">
+    <div class="col-md-4 mb-4 mb-md-0">
+        <img src="{{ movie.image_url }}" class="img-fluid rounded shadow" alt="{{ movie.title }}">
+    </div>
+    <div class="col-md-8">
+        <h1 class="mb-3">{{ movie.title }}</h1>
+        
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge bg-primary">{{ movie.genre }}</span>
+            <span class="badge bg-secondary">{{ movie.duration }} min</span>
+            <span class="badge bg-info">Released: {{ movie.release_date.strftime('%B %d, %Y') }}</span>
+        </div>
+        
+        <p class="mb-4">{{ movie.description }}</p>
+        
+        <h4 class="mb-3"><i class="far fa-calendar-alt me-2"></i> Available Showtimes</h4>
+        
+        {% if showtimes %}
+            {% set current_date = '' %}
+            
+            {% for showtime in showtimes %}
+                {% if showtime.formatted_date != current_date %}
+                    {% if current_date != '' %}
+                        </div>
+                    {% endif %}
+                    
+                    <h5 class="mt-4 mb-3">{{ showtime.formatted_date }}</h5>
+                    <div class="list-group mb-4">
+                    
+                    {% set current_date = showtime.formatted_date %}
+                {% endif %}
+                
+                <a href="{{ url_for('seats', showtime_id=showtime.id) }}" 
+                   class="list-group-item list-group-item-action showtime-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="showtime-time">{{ showtime.formatted_time }}</span>
+                            <div class="text-muted mt-1">{{ showtime.theater.name }}</div>
+                        </div>
+                        <div>
+                            <span class="badge price-badge">${{ "%.2f"|format(showtime.price) }}</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> No showtimes available for this movie. Please check back later.
+            </div>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary mt-3">
+            <i class="fas fa-arrow-left me-1"></i> Back to Movies
+        </a>
+    </div>
+</div>
+{% endblock %}

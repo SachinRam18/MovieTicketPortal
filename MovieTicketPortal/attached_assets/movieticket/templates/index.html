@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Movie List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Now Showing</h1>
+        {% if movies %}
+            <ul class="movie-list">
+            {% for movie in movies %}
+                <li>
+                    <h2>{{ movie.name }}</h2>
+                    <p>Showtimes:</p>
+                    <ul class="showtimes-list">
+                    {% for showtime in movie.showtimes %}
+                        <li>
+                            <a href="{{ url_for('select_seats', movie_id=movie.id, showtime=showtime) }}">{{ showtime }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No movies available right now.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

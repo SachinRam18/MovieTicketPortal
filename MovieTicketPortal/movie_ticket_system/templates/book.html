@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block title %}Complete Your Booking{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('showtimes', movie_id=showtime.movie_id) }}">{{ showtime.movie.title }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('seats', showtime_id=showtime.id) }}">Select Seats</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Complete Booking</li>
+    </ol>
+</nav>
+
+<div class="row mb-4">
+    <div class="col-md-12 text-center">
+        <h1 class="mb-3">Complete Your Booking</h1>
+        <p class="lead">Please enter your details to finalize your ticket purchase.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card bg-dark border-0 shadow mb-4">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-4">Booking Summary</h4>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Movie</p>
+                        <p class="fw-bold">{{ showtime.movie.title }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Theater</p>
+                        <p class="fw-bold">{{ showtime.theater.name }}</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Date & Time</p>
+                        <p class="fw-bold">{{ showtime.formatted_date }} at {{ showtime.formatted_time }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Ticket Price</p>
+                        <p class="fw-bold">${{ "%.2f"|format(showtime.price) }} per ticket</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Selected Seats</p>
+                        <p class="fw-bold">{{ selected_seats }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1 text-muted">Total Price</p>
+                        <p class="fw-bold fs-5">${{ "%.2f"|format(total_price) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-dark border-0 shadow">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-4">Your Details</h4>
+                
+                <form method="POST" action="{{ url_for('book', showtime_id=showtime.id, seats=selected_seats) }}">
+                    {{ form.csrf_token }}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id }}" class="form-label">Full Name</label>
+                        {{ form.name(class="form-control", placeholder="Enter your full name") }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.name.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.email.id }}" class="form-label">Email Address</label>
+                        {{ form.email(class="form-control", placeholder="Enter your email address") }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">
+                                {% for error in form.email.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">We'll email your ticket confirmation to this address.</small>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('seats', showtime_id=showtime.id) }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Seat Selection
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Complete Purchase <i class="fas fa-check ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
